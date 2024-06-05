@@ -34,7 +34,7 @@
     },
     "params": {
       "param_name": "Parameter name",
-      "generate": "Generate QR code",
+      "generate": "Generate QR code !",
       "qrcode_output": "QR code output",
       "download": "Download"
     },

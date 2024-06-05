@@ -9,6 +9,8 @@ import { NextResponse } from "next/server";
 import { toast } from "sonner";
 import QRCode from 'qrcode';
 import { v4 } from "uuid";
+import cryptoRandomString from 'crypto-random-string';
+
 // const schema = z.union([
 //   z.object({
 //     res_type: z.literal("queue"),
@@ -59,7 +61,7 @@ const generateQRCode = async (text: string): Promise<string> => {
 export async function genImage(req: object, signal: AbortSignal) {
   // @ts-ignore
   const text = req["url"];
-  const forceTaskId = window.crypto.randomUUID()
+  const forceTaskId = cryptoRandomString({length: 20});
   localStorage.setItem("forceTaskId", forceTaskId)
   // @ts-ignore
   req["force_task_id"] = forceTaskId

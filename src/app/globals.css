@@ -37,11 +37,11 @@
 
   .dark {
     /* --background: 240 10% 0%; */
-
     --background: 0 0% 100%;
     
     --header: 0, 0%, 100%, 0.5;
     /* --foreground: 240 10% 0%; */
+    
     --foreground: 0 0% 100%;
 
     --card: 240 10% 3.9%;
@@ -59,8 +59,8 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 240 4.8% 95.9%;
-    /* --accent: 240 3.7% 15.9%; */
-    /* --accent-foreground: 0 0% 98%; */
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -68,9 +68,35 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    
+  }
+  
+}
+@layer utilities {
+  @keyframes gradientChange {
+      0% {
+          background-position: 0%;
+      }
+
+      50% {
+          background-position: 100%
+      }
+
+      100% {
+          background-position: 0%;
+          
+      }
+  }
+
+  .gradient {
+      background: linear-gradient(30deg, #00FFF0, #ffffff,#00FFF0);
+      background-size: 200% 200%;
+  }
+  
+  .element-to-rotate {
+      animation: gradientChange 2s ease infinite;
   }
 }
-
 @layer base {
   * {
     @apply border-border;

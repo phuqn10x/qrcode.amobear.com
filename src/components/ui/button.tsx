@@ -18,6 +18,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+
+        gradient:
+          "shadow-lg	hover:border-black/80 hover:border-2 border-none	 hover:shadow-indigo-500 hover:scale-110 rounded-full duration-700 transition ease-in-out delay-100   shadow-cyan-500  gradient element-to-rotate",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -44,7 +47,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(poppins500.className,buttonVariants({ variant, size, className }))}
+        className={cn(
+          poppins500.className,
+          buttonVariants({ variant, size, className }),
+        )}
         ref={ref}
         {...props}
       />

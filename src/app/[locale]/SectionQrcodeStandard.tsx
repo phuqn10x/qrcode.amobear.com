@@ -18,7 +18,7 @@ export default function SectionQrcodeStandard({title, subtitle}: {title: string,
         <div className="flex justify-between">
 
         
-          <Label className={cn(poppins500.className," md:text-2xl sm:text-sm font-medium mb-1.5")}>
+          <Label className={cn(poppins500.className," md:text-base lg:text-2xl sm:text-base font-medium mb-1.5")}>
           {/* {t("url")} */}
           Type your text
           <div className="flex items-center gap-3">

@@ -72,7 +72,7 @@ export function SectionTopicTemplateClient({
       // selectedCallback(null);
     } else {
       setSelectedCategory(category);
-      // setSelectedItem(null);
+      setSelectedItem(null);
     }
   };
   const handleItemClick = (item: any) => {
@@ -160,7 +160,7 @@ export function SectionTopicTemplateClient({
           <Label
             className={cn(
               poppins500.className,
-              " md:text-2xl sm:text-sm font-medium mb-1.5",
+              "lg:text-2xl  md:text-base sm:text-sm font-medium mb-1.5",
             )}
           >
             {/* {t("url")} */}
@@ -186,7 +186,7 @@ export function SectionTopicTemplateClient({
                 <Label
                   className={cn(
                     poppins500.className,
-                    "flex justify-between md:text-2xl sm:text-sm font-medium ",
+                    "flex justify-between lg:text-2xl md:text-base sm:text-sm font-medium ",
                   )}
                 >
                   Choose QR style

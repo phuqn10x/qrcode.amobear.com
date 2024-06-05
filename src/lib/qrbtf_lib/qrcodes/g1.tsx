@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { genImage, ImageResponse } from "@/lib/image_service";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
@@ -63,6 +63,7 @@ function QrbtfVisualizerG1(props: { data: any }) {
   const [progress, setProgress] = useState<ProgressType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [previousImage, setPreviousImage] = useState<boolean | null>(false);
+  const intervalIdRef = useRef<any | null>(null);
   useEffect(() => {
     if (localStorage.getItem("image-base64")) {
       setImageUrl(localStorage.getItem("image-base64"));
@@ -71,76 +72,81 @@ function QrbtfVisualizerG1(props: { data: any }) {
   }, []);
   useEffect(() => {
     const forceTaskId = localStorage.getItem("forceTaskId")
-      ? localStorage.getItem("forceTaskId")
-      : null;
-    const dataProgress = {
-      id_task: forceTaskId ? forceTaskId : "",
-      id_live_preview: -1,
-      live_preview: true,
-    };
-    setProgress(null);
-    // setImageUrl("");
-    const rep: ImageResponse | null = props.data;
-    if (props.data?.status === "Starting") {
-      setPreviousImage(false)
-      setProgress({
-        value: 0.1,
-        status: "Starting...",
-      });
-      let intervalId: any; // Biến để lưu trữ ID interval
-      // Bắt đầu vòng lặp
-      intervalId = setInterval(async () => {
-        const response = await http("api/progress", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Basic YWRtaW46YWRtaW4hQDM0Ng==`,
-          },
-          body: JSON.stringify(dataProgress),
+    if(forceTaskId){
+      const dataProgress = {
+        id_task: forceTaskId ? forceTaskId : "",
+        id_live_preview: -1,
+        live_preview: true,
+      };
+      setProgress(null);
+      // setImageUrl("");
+      const rep = props.data;
+      if (props.data?.status === "Starting") {
+        setPreviousImage(false);
+        setProgress({
+          value: 0.1,
+          status: "Starting...",
         });
-        const data = await response.json();
-        if (!rep?.images) {
-          data.live_preview ? setImageUrl(data.live_preview) : "";
-        }
-        if (data.progress > 0.2) {
-          setProgress({
-            value: data.progress,
-            eta: data.eta,
-            status: "Generate starting...",
+        // Bắt đầu vòng lặp
+        intervalIdRef.current = setInterval(async () => {
+          const rep = props.data;
+          const response = await http("api/progress", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Basic YWRtaW46YWRtaW4hQDM0Ng==`,
+            },
+            body: JSON.stringify(dataProgress),
           });
-        }
-        if (data.progress > 0.3) {
-          setProgress({
-            value: data.progress,
-            eta: data.eta,
-            status: "Inferencing",
-          });
-        }
-        if (data.progress > 0.5) {
-          setProgress({
-            value: data.progress,
-            eta: data.eta,
-            status: "Generating...",
-          });
-        }
-
-        if (data.progress > 0.83) {
-          clearInterval(intervalId);
-          setProgress({
-            value: 1,
-            eta: data.eta,
-            status: "Uploading photo...",
-          });
-        }
-        return data;
-      }, 500);
-    }
-    if (rep?.images) {
-      if (rep?.images.length > 0) {
-        const base64 = `data:image/png;base64,${rep?.images[0]}`;
-        setImageUrl(base64);
-        localStorage.setItem("image-base64", base64);
+          const data = await response.json();
+          if (!rep?.images) {
+            if (data.live_preview) {
+              setImageUrl(data.live_preview);
+            }
+          }
+          if (data.progress > 0.2) {
+            setProgress({
+              value: data.progress,
+              eta: data.eta,
+              status: "Generate starting...",
+            });
+          }
+          if (data.progress > 0.3) {
+            setProgress({
+              value: data.progress,
+              eta: data.eta,
+              status: "Inferencing",
+            });
+          }
+          if (data.progress > 0.5) {
+            setProgress({
+              value: data.progress,
+              eta: data.eta,
+              status: "Generating...",
+            });
+          }
+          if (data.progress > 0.83) {
+            clearInterval(intervalIdRef.current);
+            setProgress({
+              value: 1,
+              eta: data.eta,
+              status: "Uploading photo...",
+            });
+          }
+        }, 2000);
       }
+  
+      if (rep?.images) {
+        setProgress(null);
+        clearInterval(intervalIdRef.current);
+        if (rep?.images.length > 0) {
+          const base64 = `data:image/png;base64,${rep?.images[0]}`;
+          setImageUrl(base64);
+          localStorage.setItem("image-base64", base64);
+        }
+      }
+      // Dọn dẹp interval khi component unmount hoặc khi props.data thay đổi
+      return () => clearInterval(intervalIdRef.current);
     }
   }, [props.data]);
   return (
@@ -165,8 +171,7 @@ function QrbtfVisualizerG1(props: { data: any }) {
             >
               <Progress value={progress.value} className="w-[60%] h-2 z-10" />
               <div className={cn(poppins500.className, " text-sm z-10")}>
-                {progress.status}{" "}
-                {progress.eta && `(eta : ${progress.eta?.toFixed(0)}s)`}
+                {progress.status}{" "}{progress.eta && `( eta : ${progress.eta?.toFixed(0)}s )`}
               </div>
             </motion.div>
           )}

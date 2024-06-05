@@ -99,7 +99,7 @@ export function SectionStylesClient() {
         {/* <UrlInput /> */}
       {/* </div> */}
       {/* <Container> */}
-        <Label className={cn(poppins500.className,"flex justify-between lg:text-2xl text-sm font-medium mb-2")}>
+        <Label className={cn(poppins500.className,"flex justify-between lg:text-2xl md:text-base sm:text-sm font-medium mb-2")}>
           {/* {t("title")} */}
           Choose QR style
           <span className=" font-normal lg:text-sm text-foreground/50 content-center	">
