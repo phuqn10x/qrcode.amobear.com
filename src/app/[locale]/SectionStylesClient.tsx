@@ -12,6 +12,7 @@ import { Container } from "@/components/Containers";
 import React, {  useRef } from "react";
 import { useDraggable } from "react-use-draggable-scroll";
 import { TrackLink } from "@/components/TrackComponents";
+import { Step2 } from "@/components/StepSvg";
 export function SectionStylesClient() {
   const currentQrcodeType = useCurrentQrcodeType();
   const ref =
@@ -84,29 +85,23 @@ export function SectionStylesClient() {
 
   return (
     <div className="my-9 ">
-      {/* <div className="mt-6 w-full"> */}
-        {/* <Label className="flex justify-between text-sm font-medium mb-1.5"> */}
-        {/* {t("url")} */}
-        {/* Type your URL */}
-        {/* <div className="flex items-center gap-3"> */}
-        {/* <div className="text-sm"> */}
-        {/* 10 */}
-        {/* <span className="opacity-50">/255</span> */}
-        {/* </div> */}
-        {/* <ScanButton name="scan" /> */}
-        {/* </div> */}
-        {/* </Label> */}
-        {/* <UrlInput /> */}
-      {/* </div> */}
-      {/* <Container> */}
-        <Label className={cn(poppins500.className,"flex justify-between lg:text-2xl md:text-base sm:text-sm font-medium mb-2")}>
-          {/* {t("title")} */}
-          Choose QR style
-          <span className=" font-normal lg:text-sm text-foreground/50 content-center	">
-            {/* {t("subtitle")} */}
-            Swipe left or right to view more
-          </span>
-        </Label>
+       <div className="my-3  flex">
+                <div className="inline-flex flex-1">
+                  <Step2 />
+                  <Label
+                    className={cn(
+                      poppins500.className,
+                      "flex justify-between self-center lg:text-2xl md:text-base sm:text-sm font-medium ",
+                    )}
+                  >
+                    Choose QR style
+                  </Label>
+                </div>
+                <span className="align font-normal lg:text-sm text-foreground/50 content-center	">
+                  {/* {t("subtitle")} */}
+                  Swipe left or right to view more
+                </span>
+              </div>
       {/* </Container> */}
 
       <div

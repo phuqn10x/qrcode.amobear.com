@@ -1,12 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { CircleCheck, QrCodeIcon } from "lucide-react";
-import { Box, Heading, Text, Theme } from "@radix-ui/themes";
-import { transitionDampingMd } from "@/lib/animations";
-
 import {
-  Container,
   SplitLeft,
   SplitRight,
   SplitView,
@@ -27,18 +22,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   cn,
-  poppins500,
-  raleway,
   raleway700,
   useCurrentQrcodeType,
 } from "@/lib/utils";
-import { Loader2, LucideDownload } from "lucide-react";
+import { Loader2, LucideDownload, RotateCcw } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { StyleTitle } from "@/components/Titles";
 import { useAtomValue } from "jotai";
 import { urlAtom } from "@/lib/states";
 import { downloaderMaps } from "@/lib/downloader";
-import { Link } from "@/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,7 +38,6 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useImageService } from "@/lib/image_service";
-import { trackEvent } from "@/components/TrackComponents";
 import { CommonControlProps, QrbtfModule } from "@/lib/qrbtf_lib/qrcodes/param";
 import {
   Select,
@@ -55,13 +46,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { useDraggable } from "react-use-draggable-scroll";
 import { SectionTopicTemplateClient } from "@/app/[locale]/SectionTopicTemplateClient";
-import { log } from "node:util";
-import { SectionStyles } from "@/app/[locale]/SectionStyles";
 import { usePathname } from "next/navigation";
 export interface QrcodeGeneratorProps<P extends {}>
   extends HTMLAttributes<HTMLDivElement> {
@@ -77,6 +62,21 @@ export function QrcodeGenerator<P extends {}>(props: QrcodeGeneratorProps<P>) {
   const t = useTranslations("index.params");
   const pathname = usePathname();
   const url = useAtomValue(urlAtom);
+  const [imageSaved, setImageSaved] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  
+  useEffect(() => {
+    const imageLocal = localStorage.getItem("image-base64") ;
+    if(refresh){
+      localStorage.removeItem("image-base64")
+      setImageSaved(false)
+      setRefresh(false)
+    }else{
+      imageLocal
+      ? setImageSaved(true)
+      : setImageSaved(false);
+    }
+  });
   const { onSubmit, currentReq, resData } = useImageService(
     props.qrcodeModule.type === "api_fetcher"
       ? props.qrcodeModule.fetcher
@@ -224,66 +224,78 @@ export function QrcodeGenerator<P extends {}>(props: QrcodeGeneratorProps<P>) {
                   )}
                 </div>
               </div>
-              <div className="flex justify-center">
-              {props.qrcodeModule.type === "api_fetcher" && (
-                <div className="text-center">
-                  <Button
-                    disabled={!!currentReq}
-                    className={cn(
-                      raleway700.className,
-                      "py-4 my-4 text-base  ",
-                    )}
-                    variant={"gradient"}
-                    /* @ts-ignore*/
-                    onClick={() => onSubmit(requestAi)}
-                    // onClick={() => onSubmit(form.getValues())}
-                  >
-                    {!!currentReq && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {t("generate")}
-                  </Button>
-                </div>
-              )}
-              <DropdownMenu>
-                <DropdownMenuTrigger disabled={!!currentReq}>
-                  <Badge
-                    className={cn(
-                      "rounded-md hover:bg-accent cursor-pointer py-1 bg-gradient-to-t from-cyan-qr/25 to-purple-qr/25  rounded-full",
-                      currentReq && "opacity-50",
-                    )}
-                    variant="outline"
-                  >
-                    <LucideDownload className="w-4 h-4 mr-1" />
-                    {/* download */}
-                    {t("download")}
-                  </Badge>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {Object.entries(downloaderMaps[props.qrcodeModule.type]).map(
-                    ([type, handler]) => (
-                      <DropdownMenuItem
-                        key={type}
-                        onClick={() => {
-                          qrcodeWrapperRef.current &&
-                            handler({
-                              name: currentQrcodeType,
-                              wrapper: qrcodeWrapperRef.current,
-                              params: componentProps,
-                              // userId: session?.user.id
-                            });
-                        }}
-                      >
-                        <span className="_font-mono">
-                          {type.toLocaleUpperCase()}
-                        </span>
-                      </DropdownMenuItem>
-                    ),
+              <div className="flex justify-center my-4 ">
+                {(!imageSaved && (defaultPreset === "g1"))&& (
+                 
+                    <Button
+                      disabled={!!currentReq}
+                      className={cn(raleway700.className, " text-base ")}
+                      variant={"gradient"}
+                      /* @ts-ignore*/
+                      onClick={() => onSubmit(requestAi)}
+                      // onClick={() => onSubmit(form.getValues())}
+                    >
+                      {!!currentReq && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      {t("generate")}
+                    </Button>
+                 
+                )}
+                <div className="h-full flex items-center gap-x-2">
+                  {(imageSaved || !(defaultPreset === "g1")) && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger disabled={!!currentReq}>
+                        <Badge
+                          className={cn(
+                            "text-base py-2 px-4",
+                            currentReq && "opacity-50",
+                          )}
+                          variant="gradient"
+                        >
+                          <LucideDownload className="w-5 h-5 mr-1" />
+
+                          {/* download */}
+                          {t("download")}
+                        </Badge>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        {Object.entries(
+                          downloaderMaps[props.qrcodeModule.type],
+                        ).map(([type, handler]) => (
+                          <DropdownMenuItem
+                            key={type}
+                            onClick={() => {
+                              qrcodeWrapperRef.current &&
+                                handler({
+                                  name: currentQrcodeType,
+                                  wrapper: qrcodeWrapperRef.current,
+                                  params: componentProps,
+                                  // userId: session?.user.id
+                                });
+                            }}
+                          >
+                            <span className="_font-mono">
+                              {type.toLocaleUpperCase()}
+                            </span>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  { (imageSaved  && defaultPreset === "g1") && (
+                    <Button
+                    className={cn(raleway700.className, " text-base  p-3")}
+                    variant={"gradient"}
+                    onClick= {() => setRefresh(true)}
+                  >
+                    
+                    <RotateCcw className="h-4 w-4 " />
+                  </Button>
+                  )} 
+                  
+                </div>
               </div>
-              
             </div>
           </div>
         </SplitRight>

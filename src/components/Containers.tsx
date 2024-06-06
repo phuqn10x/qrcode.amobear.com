@@ -32,7 +32,7 @@ export function SplitRight(props: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "shrink-0 w-full sm:w-[402px] md:w-[300px] lg:w-[500px]",
+        "shrink-0 w-full sm:w-[402px] md:w-[300px] lg:w-[450px]",
         props.className,
       )}
     >

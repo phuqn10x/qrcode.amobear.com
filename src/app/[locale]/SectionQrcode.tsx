@@ -53,7 +53,7 @@ export default function SectionQrcode() {
   return (
     <div>
       <Container>
-        <div className="h-[1600px] lg:h-[1250px]  [perspective:1000px] relative b flex flex-col  mx-auto w-full  items-start justify-start ">
+        <div className="h-[1680px] lg:h-[1250px]  [perspective:1000px] relative b flex flex-col  mx-auto w-full  items-start justify-start ">
           <Tabs tabs={TabsList} />
         </div>
       </Container>

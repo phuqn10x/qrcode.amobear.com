@@ -11,10 +11,10 @@ import { Theme } from "@radix-ui/themes";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { http } from "@/lib/network";
-import useSWR from "swr"; // Import useSWR correctly
 import { ScanButton } from "@/components/ScanButton";
 import { UrlInput } from "@/components/hero/UrlInput";
 import { usePathname } from "next/navigation";
+import { Step1, Step2 } from "@/components/StepSvg";
 
 interface SectionTopicTemplateClientProps {
   selectedCallback?: (selectedItem: any) => void;
@@ -41,7 +41,7 @@ export function SectionTopicTemplateClient({
   }, [selectedItem]);
   const pathname = usePathname();
   useEffect(() => {
-    console.log("pathname", pathname);
+    // console.log("pathname", pathname);
     setIsLoading(true);
     setError(null);
     http(`/api/topic_list`, {
@@ -82,70 +82,45 @@ export function SectionTopicTemplateClient({
   const render = (item: any, index: number) => {
     return (
       <div key={item.id} className="">
-        {/* Hiển thị chi tiết mục */}
-        <div className="lg:h-[140px] h-[110px]">
+        <div className="">
           <Theme>
             <div
               className={cn(
                 "snap-start sm:ml-0 transition-opacity",
-                // @ts-ignore
+                /// @ts-ignore
                 selectedItem?.id === item.id ? "" : "dark:opacity-80",
               )}
             >
               <button onClick={() => handleItemClick(item)}>
                 <motion.div
-                  className={cn(
-                    "relative lg:w-[140px] sm:w-[120px] w-[110px] bg-accent/30 rounded-sm overflow-hidden",
-                  )}
+                  className={cn("relative  bg-accent/30 overflow-hidden")}
                   whileTap={{
                     scale: 0.95,
                     opacity: 0.9,
                   }}
                   transition={transitionDampingMd}
                 >
-                  <AspectRatio ratio={1} />
-
-                  <div className="absolute top-0 left-0 w-full h-full  flex flex-col items-center justify-center "></div>
-
-                  <div className="absolute z-[1] 	p-[3px] top-0 left-0 w-full h-full flex flex-col items-center justify-center rounded-[1px] ">
-                    {/* @ts-ignore*/}
-                    {/*{selectedCategory?.id === item["id"] && <CircleCheck />}*/}
-                    {/* @ts-ignore*/}
-
-                    <Image
-                      src={`${"https://openai.amobear.com/" + item?.thumb}`}
-                      width={320}
-                      height={320}
-                      alt=""
-                      className="block w-full h-full rounded-lg "
-                    />
-                  </div>
-
-                  {/* <div
-                    className={cn(
-                      "absolute top-0 left-0 w-full h-full rounded-[1px]",
-                      // @ts-ignore
-                      selectedItem?.id === item.id 
-                        ? " "
-                        : "",
-                    )}
-                  ></div> */}
                   <div
                     className={cn(
-                      "absolute top-0 left-0 w-full h-full rounded-sm ring ring-inset",
+                      "p-[3px] flex flex-col items-center justify-center rounded-md ",
                       // @ts-ignore
-                      selectedItem?.id === item.id
-                        ? " ring-inset bg-gradient-to-r from-cyan-qr to-purple-qr "
-                        : " dark:hidden",
+                      selectedItem?.id === item["id"]
+                        ? "ring ring-inset bg-gradient-to-r from-cyan-qr to-purple-qr z-[1] "
+                        : "",
                     )}
-                  ></div>
+                  >
+                    <Image
+                      src={`${"https://openai.amobear.com/" + item?.thumb}`}
+                      alt=""
+                      width={100}
+                      height={100}
+                      
+                      priority={true}
+                      className="block w-full h-full rounded-md "
+                    />
+                  </div>
                 </motion.div>
-                {/* <p>style {index + 1}</p> */}
               </button>
-              {/* @ts-ignore*/}
-
-              {/* @ts-ignore*/}
-              {/*{selectedItem?.id === item.id && <CircleCheck />}*/}
             </div>
           </Theme>
         </div>
@@ -154,13 +129,14 @@ export function SectionTopicTemplateClient({
   };
 
   return (
-    <div>
+    <div className="lg:mx-10 md:mx-6 sm:m-0">
       <div className="mt-6 w-full ">
-        <div className="flex justify-between">
+        <div className="flex my-2">
+          <Step1 />
           <Label
             className={cn(
               poppins500.className,
-              "lg:text-2xl  md:text-base sm:text-sm font-medium mb-1.5",
+              "lg:text-2xl  md:text-base sm:text-sm content-center  font-medium mb-1.5",
             )}
           >
             {/* {t("url")} */}
@@ -182,23 +158,26 @@ export function SectionTopicTemplateClient({
         <div className="flex flex-col">
           <div className="my-2 relative">
             {data.length != 0 && (
-              <div className="my-2">
-                <Label
-                  className={cn(
-                    poppins500.className,
-                    "flex justify-between lg:text-2xl md:text-base sm:text-sm font-medium ",
-                  )}
-                >
-                  Choose QR style
-                  <span className="align font-normal lg:text-sm text-foreground/50 content-center	">
-                    {/* {t("subtitle")} */}
-                    Swipe left or right to view more
-                  </span>
-                </Label>
+              <div className="my-3  flex">
+                <div className="inline-flex flex-1">
+                  <Step2 />
+                  <Label
+                    className={cn(
+                      poppins500.className,
+                      "flex justify-between self-center lg:text-2xl md:text-base sm:text-sm font-medium ",
+                    )}
+                  >
+                    Choose QR style
+                  </Label>
+                </div>
+                <span className="align font-normal lg:text-sm text-foreground/50 content-center	">
+                  {/* {t("subtitle")} */}
+                  Swipe left or right to view more
+                </span>
               </div>
             )}
 
-            <div className="  pl-2 py-3 bg-gradient-to-r  from-white to-purple-qr rounded-lg before:self-center before:block before:z-[1] before:absolute before:h-[100%] rounded-sm before:w-[58px] before:in before:left-[91.6%] before:-inset-1 before:bg-gradient-to-r before:from-black/0 before:to-dark-blue-qr/70 relative ">
+            <div className="  pl-2 py-3 bg-gradient-to-r  from-white to-purple-qr rounded-lg before:self-center before:block before:z-[1] before:absolute before:h-[100%] rounded-sm before:w-auto before:in before:left-[91.6%] before:-inset-1 before:bg-gradient-to-r before:from-black/0 before:to-dark-blue-qr/70 relative ">
               <div
                 className=" flex space-x-3 overflow-x-scroll no-scrollbar  "
                 {...eventsTopic}
@@ -245,48 +224,19 @@ export function SectionTopicTemplateClient({
                                   }}
                                   transition={transitionDampingMd}
                                 >
-                                  <AspectRatio ratio={1} />
-
-                                  <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center "></div>
-
-                                  <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center">
-                                    {/* @ts-ignore*/}
-                                    {/*{selectedCategory?.id === item["id"] && <CircleCheck />}*/}
-                                    {/* @ts-ignore*/}
-
-                                    <Image
-                                      /* @ts-ignore*/
-                                      src={`${"https://openai.amobear.com/" + item.catThumb}`}
-                                      width={180}
-                                      height={180}
-                                      alt=""
-                                      className="block w-full h-full  p-1"
-                                    />
-                                  </div>
-
-                                  <div
-                                    className={cn(
-                                      "absolute top-0 left-0 w-full h-full rounded-sm ",
-                                      // @ts-ignore
-                                      selectedCategory?.catId === item.catId
-                                        ? "ring-[5px] "
-                                        : "",
-                                    )}
-                                  ></div>
-
-                                  <div
-                                    className={cn(
-                                      "absolute top-0 left-0 w-full h-full rounded-sm  ",
-                                      // @ts-ignore
-                                      selectedCategory?.catId === item.catId
-                                        ? "ring-2 ring-foreground "
-                                        : "ring-1 ring-border dark:hidden",
-                                    )}
-                                  ></div>
+                                  <Image
+                                    /* @ts-ignore*/
+                                    src={`${"https://openai.amobear.com/" + item.catThumb}`}
+                                    width={180}
+                                    height={180}
+                                    alt=""
+                                    priority={true}
+                                    className="block w-full h-full  p-1"
+                                  />
                                 </motion.div>
-                               
+
                                 <p className={cn(poppins500.className, "p-1")}>
-                                   {/* @ts-ignore */}
+                                  {/* @ts-ignore */}
                                   {item.catName}
                                 </p>
                               </button>
@@ -339,12 +289,12 @@ export function SectionTopicTemplateClient({
                 </Label>
               </div>
             )} */}
-           
+
             <div
-             /* @ts-ignore*/
+              /* @ts-ignore*/
               className={
                 selectedCategory &&
-                "bg-black/30 rounded-lg px-1 pt-4 after:justify-self-center  after:block before:z-[2] after:rounded-sm after:absolute after:h-[47`  px] after:w-full after:in after:top-[84%] after:-inset-1 after:bg-gradient-to-b after:from-black/0 after:to-dark-blue-qr/70 relative inline-block before:block before:h-[20px] before:w-[10px] before:border-l-transparent before:border-r-transparent before:top-[-25px] before:lg:left-[55px] before:left-[40px]  before:-inset-1 before:border-r-[15px] before:absolute 	before:border-l-solid before:border-r-solid before:border-l-[15px] before:border-b-[25px] before:border-b-[#0000004d] after:z-[1]"
+                "bg-black/30 rounded-lg px-1 pt-4 after:justify-self-center  after:block before:z-[2] after:rounded-sm after:absolute after:h-[47px] after:w-full after:in after:top-[84%] after:-inset-1 after:bg-gradient-to-b after:from-black/0 after:to-dark-blue-qr/70 relative inline-block before:block before:h-[20px] before:w-[10px] before:border-l-transparent before:border-r-transparent before:top-[-25px] before:lg:left-[55px] before:left-[40px]  before:-inset-1 before:border-r-[15px] before:absolute 	before:border-l-solid before:border-r-solid before:border-l-[15px] before:border-b-[25px] before:border-b-[#0000004d] after:z-[1]"
               }
             >
               <div

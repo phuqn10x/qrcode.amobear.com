@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
 
         gradient:
-          "shadow-lg	hover:border-black/80 hover:border-2 border-none	 hover:shadow-indigo-500 hover:scale-110 rounded-full duration-700 transition ease-in-out delay-100   shadow-cyan-500  gradient element-to-rotate",
+          "shadow-lg  hover:border-black/80 hover:border-2 border-none	 hover:shadow-indigo-500 hover:scale-110 rounded-full duration-700 transition ease-in-out delay-100   shadow-cyan-500  gradient element-to-rotate",
       },
       size: {
         default: "h-10 px-4 py-2",

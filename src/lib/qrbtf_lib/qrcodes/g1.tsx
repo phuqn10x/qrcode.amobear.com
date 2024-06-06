@@ -65,11 +65,13 @@ function QrbtfVisualizerG1(props: { data: any }) {
   const [previousImage, setPreviousImage] = useState<boolean | null>(false);
   const intervalIdRef = useRef<any | null>(null);
   useEffect(() => {
-    if (localStorage.getItem("image-base64")) {
+    if (localStorage.getItem("image-base64") ) {
       setImageUrl(localStorage.getItem("image-base64"));
       setPreviousImage(true);
+    }else if(!localStorage.getItem("image-base64") && !progress){
+      setImageUrl(null);
     }
-  }, []);
+  });
   useEffect(() => {
     const forceTaskId = localStorage.getItem("forceTaskId")
     if(forceTaskId){
@@ -182,9 +184,6 @@ function QrbtfVisualizerG1(props: { data: any }) {
      
         <AnimatePresence>
           {imageUrl && (
-        
-              
-
               <motion.div
                 key="final-image"
                 variants={opacityAnimations}
@@ -194,9 +193,9 @@ function QrbtfVisualizerG1(props: { data: any }) {
                 exit="hidden"
                 className="relative bg-background  w-full h-full  z-0"
               >
-                {previousImage && (
+                {/* {previousImage && (
                 <div className="absolute top-[90%] left-2 z-[1] p-1 px-2 rounded-sm bg-black/60">Your previous generate image</div>
-              )} 
+              )}  */}
                 <Image
                   width={500}
                   height={500}
