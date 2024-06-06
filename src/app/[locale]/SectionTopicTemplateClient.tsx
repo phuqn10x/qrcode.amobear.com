@@ -170,7 +170,7 @@ export function SectionTopicTemplateClient({
                     Choose QR style
                   </Label>
                 </div>
-                <span className="align font-normal lg:text-sm md:text-[12px] text-[10px] text-foreground/50 content-center	">
+                <span className="align font-normal lg:text-sm md:text-[12px] text-[10px] text-foreground/50 self-center	">
                   {/* {t("subtitle")} */}
                   Swipe left or right to view more
                 </span>

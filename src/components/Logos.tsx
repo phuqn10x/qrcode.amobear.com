@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 export function QrbtfLogo(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <div className="flex">
-      <div className="content-center mr-2">
+      <div className="self-center mr-2">
         <Badge>Logo</Badge>
       </div>
       <div>
