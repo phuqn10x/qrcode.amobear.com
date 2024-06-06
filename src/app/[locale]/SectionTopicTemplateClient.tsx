@@ -136,7 +136,7 @@ export function SectionTopicTemplateClient({
           <Label
             className={cn(
               poppins500.className,
-              "lg:text-2xl  md:text-base sm:text-sm content-center  font-medium mb-1.5",
+              "lg:text-2xl  md:text-base sm:text-sm self-center  font-medium mb-1.5",
             )}
           >
             {/* {t("url")} */}
@@ -170,7 +170,7 @@ export function SectionTopicTemplateClient({
                     Choose QR style
                   </Label>
                 </div>
-                <span className="align font-normal lg:text-sm text-foreground/50 content-center	">
+                <span className="align font-normal lg:text-sm md:text-[12px] text-[10px] text-foreground/50 content-center	">
                   {/* {t("subtitle")} */}
                   Swipe left or right to view more
                 </span>

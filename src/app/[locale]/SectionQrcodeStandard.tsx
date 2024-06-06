@@ -19,7 +19,7 @@ export default function SectionQrcodeStandard({title, subtitle}: {title: string,
         <div className="flex my-2">
 
           <Step1 />
-          <Label className={cn(poppins500.className," md:text-base content-center lg:text-2xl sm:text-base font-medium mb-1.5")}>
+          <Label className={cn(poppins500.className," md:text-base self-center lg:text-2xl sm:text-base font-medium mb-1.5")}>
           {/* {t("url")} */}
           
           Type your text

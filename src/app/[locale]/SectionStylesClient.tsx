@@ -97,7 +97,7 @@ export function SectionStylesClient() {
                     Choose QR style
                   </Label>
                 </div>
-                <span className="align font-normal lg:text-sm text-foreground/50 content-center	">
+                <span className="align font-normal sm:text-[10px] text-sm text-foreground/50 content-center	">
                   {/* {t("subtitle")} */}
                   Swipe left or right to view more
                 </span>
